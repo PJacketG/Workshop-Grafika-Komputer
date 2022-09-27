@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include <GL/glew.h>
-#include <GL/freeglut.h> 
+#include <GL/freeglut.h>
 
 static float X = 0.0;
 static float Y = 0.0;
@@ -12,46 +12,6 @@ static float A = 0.0;
 static float B = 0.0;
 static float C = 0.0;
 static float D = 0.0;
-
-void draw_cylinder(GLfloat radius,
-                   GLfloat height,
-                   GLubyte R,
-                   GLubyte G,
-                   GLubyte B)
-{
-    GLfloat x              = 0.0;
-    GLfloat y              = 0.0;
-    GLfloat angle          = 0.0;
-    GLfloat angle_stepsize = 0.1;
-
-    /** Draw the tube */
-    glColor3ub(R-40,G-40,B-40);
-    glBegin(GL_QUAD_STRIP);
-    angle = 0.0;
-        while( angle < 2*M_PI ) {
-            x = radius * cos(angle);
-            y = radius * sin(angle);
-            glVertex3f(x, y , height);
-            glVertex3f(x, y , 0.0);
-            angle = angle + angle_stepsize;
-        }
-        glVertex3f(radius, 0.0, height);
-        glVertex3f(radius, 0.0, 0.0);
-    glEnd();
-
-    /** Draw the circle on top of cylinder */
-    glColor3ub(R,G,B);
-    glBegin(GL_POLYGON);
-    angle = 0.0;
-        while( angle < 2*M_PI ) {
-            x = radius * cos(angle);
-            y = radius * sin(angle);
-            glVertex3f(x, y , height);
-            angle = angle + angle_stepsize;
-        }
-        glVertex3f(radius, 0.0, height);
-    glEnd();
-}
 
 // Drawing routine.
 void drawScene(void)
@@ -63,30 +23,46 @@ void drawScene(void)
 	glTranslatef(X, Y, Z);
 	glRotatef(A, B, C, D);
 
-	glRotatef(-60, 1.0, 0.0, 0.0);
-	draw_cylinder(5.0, 1.0, 255, 160, 100);
-	glRotatef(60, -1.0, 0.0, 0.0);
+  float radius = 10;
+  float twoPI = 2 * M_PI;
 
-    glRotatef(-60, -1.0, 0.5, 0.0);
-	draw_cylinder(1., -15.0, 255, 160, 100);
-    glRotatef(60, 1.0, -0.5, 0.0);
-
-	glRotatef(231.5, -1, -5, -5);
-	draw_cylinder(1.0, -15.0, 255, 160, 100);
-//	glRotatef(60, 1.0, 15.0, 0.0);
-	glRotatef(-231.5, 1, 5, 5);
-
-	glRotatef(-196.5, 0, -4.5, -3.5);
-	draw_cylinder(1.0, -15.0, 255, 160, 100);
+  glBegin(GL_TRIANGLE_FAN);
+  glColor4f(1.0, 1.0, 1.0, 1.0);      
+  glVertex2f(0.0, 0.0);
+  glColor3f(0.0, 1.0, 0.0);      
+  for (float i = -0.5; i <= 0.5; i += 0.001)
+      glVertex2f((sin(i)*radius), (cos(i)*radius));
 
 
-	glFlush();
-}
+  glColor3f(0.0, 0.0, 1.0);      
+  glVertex2f(0.0, 0.0);
+  for (float i = -1.5; i <= -0.5; i += 0.001)
+      glVertex2f((sin(i)*radius), (cos(i)*radius));
 
-// Initialization routine.
-void setup(void)
-{
-	glClearColor(1.0, 1.0, 1.0, 0.0);
+  glColor3f(1.0, 1.0, 0.0);      
+  glVertex2f(0.0, 0.0);
+  for (float i = -2.5; i <= -1.5; i += 0.001)
+      glVertex2f((sin(i)*radius), (cos(i)*radius));
+
+
+  glColor3f(1.0, 0.0, 1.0);      
+  glVertex2f(0.0, 0.0);
+  for (float i = -4.5; i <= -2.5; i += 0.001)
+      glVertex2f((sin(i)*radius), (cos(i)*radius));
+  
+
+  glColor3f(1.0, 0.0, 0.0);      
+  glVertex2f(0.0, 0.0);
+  for (float i = 0.5; i <= 1.5; i += 0.001)
+      glVertex2f((sin(i)*radius), (cos(i)*radius));
+
+  glColor4f(0.0f, 1.0f, 1.0f, 1.0f);     
+  glVertex2f(0.0, 0.0);
+  for (float i = 1.5; i <= 2.5; i += 0.001)
+      glVertex2f((sin(i)*radius), (cos(i)*radius));
+
+  glEnd();
+  glFlush();
 }
 
 // OpenGL window reshape routine.
@@ -96,7 +72,7 @@ void resize(int w, int h)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
-	glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
+	glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 25.0);
 	//glOrtho(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -134,6 +110,7 @@ void keyInput(unsigned char key, int x, int y)
 		Z += 0.5;
 		glutPostRedisplay();
 		break;
+  
 	case 'i':
 		A += 0.5;
 		glutPostRedisplay();
@@ -179,7 +156,8 @@ void keyInput(unsigned char key, int x, int y)
 		std::cout << B << "\n";
 		std::cout << C << "\n";
 		std::cout << D << "\n";
-		break;
+    break;
+  
 	default:
 		break;
 	}
@@ -197,14 +175,13 @@ int main(int argc, char **argv)
 	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("5221600015_Ananta Miyoru Wijaya.cpp");
+  glClearColor(1.0, 1.0, 1.0, 0.0); 
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(resize);
 	glutKeyboardFunc(keyInput);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
-
-	setup();
 
 	glutMainLoop();
 }

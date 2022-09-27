@@ -57,7 +57,7 @@ void drawScene(void)
 
 	//glutWireRhombicDodecahedron();
 	//glutSolidRhombicDodecahedron();
-	//glutWireCylinder(2.0, 5.0, 10.0, 2.0);
+	glutWireCylinder(2.0, 5.0, 100.0, 1.0);
 
 	glFlush();
 }
