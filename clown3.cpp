@@ -132,6 +132,8 @@ void drawScene(void)
 	//*** clown3.cpp ends here. ***
 	
 
+	
+	//menambah hidung dan mata
 	glPushMatrix();
 
 	// Transformations of the left eye
